@@ -3,7 +3,7 @@
 ## Overview
 This project involves building a cloud-native resource monitoring application using Python, Flask, and psutil. The application is containerized with Docker, deployed on Kubernetes using KIND, and orchestrated with Kubernetes services. The objective is to provide a hands-on learning experience in developing, containerizing, and deploying cloud-native applications in a local Kubernetes environment.
 
-![Cloud Monitoring App Screenshot](https://raw.githubusercontent.com/rahulvadakkiniyil/Images/cloud-native-monitoring-app-image.png)
+![Cloud Monitoring App Screenshot](Images/cloud-native-monitoring-app-image.png)
 
 
 ## 📌 Key Learning Outcomes
