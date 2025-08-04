@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cloud-native-monitoring-app-deployment
+  labels:
+    app: cloud-native-monitoring-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: cloud-native-monitoring-app
+  template:
+    metadata:
+      labels:
+        app: cloud-native-monitoring-app
+    spec:
+      containers:
+      - name: cloud-native-monitoring-app
+        image: apurva1025/my-flask-app:latest
+        ports:
+        - containerPort: 5000
+

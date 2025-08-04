@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Monitoring Dashboard</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1e1e2e;
+            color: white;
+            text-align: center;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #282a36;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        .plot-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+        .plotly-graph-div {
+            width: 45%;
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+        }
+        .alert {
+            background-color: #ff5f5f;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 System Monitoring Dashboard</h1>
+        
+        {% if message %}
+        <div class="alert">{{ message }}</div>
+        {% endif %}
+
+        <div class="plot-container">
+            <div class="plotly-graph-div">
+                <div id="cpu-gauge"></div>
+            </div>
+            <div class="plotly-graph-div">
+                <div id="mem-gauge"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function renderGauges(cpu, mem) {
+            var cpuGauge = {
+                type: "indicator",
+                mode: "gauge+number",
+                value: cpu,
+                gauge: {
+                    axis: { range: [0, 100] },
+                    bar: { color: "#1f77b4" },
+                    steps: [
+                        { range: [0, 50], color: "#d9f0a3" },
+                        { range: [50, 85], color: "#ffeb84" },
+                        { range: [85, 100], color: "#ff5f5f" }
+                    ],
+                    threshold: {
+                        line: { color: "red", width: 4 },
+                        thickness: 0.75,
+                        value: cpu
+                    }
+                }
+            };
+
+            var memGauge = {
+                type: "indicator",
+                mode: "gauge+number",
+                value: mem,
+                gauge: {
+                    axis: { range: [0, 100] },
+                    bar: { color: "#1f77b4" },
+                    steps: [
+                        { range: [0, 50], color: "#d9f0a3" },
+                        { range: [50, 85], color: "#ffeb84" },
+                        { range: [85, 100], color: "#ff5f5f" }
+                    ],
+                    threshold: {
+                        line: { color: "red", width: 4 },
+                        thickness: 0.75,
+                        value: mem
+                    }
+                }
+            };
+
+            Plotly.react('cpu-gauge', [cpuGauge], { title: "CPU Utilization" });
+            Plotly.react('mem-gauge', [memGauge], { title: "Memory Utilization" });
+        }
+
+        function fetchMetrics() {
+            fetch("/metrics")
+                .then(response => response.json())
+                .then(data => {
+                    renderGauges(data.cpu_metric, data.mem_metric);
+                })
+                .catch(error => console.error("Error fetching metrics:", error));
+        }
+
+        // Initial render
+        renderGauges({{ cpu_metric }}, {{ mem_metric }});
+
+        // Auto-update every 2 seconds
+        setInterval(fetchMetrics, 2000);
+    </script>
+</body>
+</html>

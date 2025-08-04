@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: cloud-native-monitoring-app-pod
+spec:
+  containers:
+  - name: cloud-native-monitoring-app
+    image: apurva1025/my-flask-app:latest
+    ports:
+    - containerPort: 5000
+
