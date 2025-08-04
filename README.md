@@ -162,7 +162,7 @@ metadata:
 spec:
   containers:
   - name: cloud-native-monitoring-app
-    image: apurva1025/my-flask-app:latest
+    image: xxxxxxxxxx.dkr.ecr.us-east-1.amazonaws.com/my_monitoring_app_image:latest
     ports:
     - containerPort: 5000
 ```
